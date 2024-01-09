@@ -1,12 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const { readdirSync } = require("fs");
+const dotenv = require("dotenv");
+
+
+dotenv.config();
+
 app.use(cors());
 
-const userRouter = require("./routes/user");
+readdirSync("./routes").map(route => app.use("/", require("./routes/" + route)));
 
-app.use("/user", userRouter);
-
-app.listen(8000, () => {
-  console.log("server is lestining...");
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
