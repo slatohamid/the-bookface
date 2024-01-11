@@ -1,24 +1,26 @@
 const express = require("express");
-const cors = require("cors");
-const app = express();
-const { readdirSync } = require("fs");
-const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-
-
+const cors = require("cors");
+const {readdirSync} = require("fs");
+const dotenv = require("dotenv");
 dotenv.config();
 
+const app = express();
+app.use(express.json());
 app.use(cors());
 
-// Routes
-readdirSync("./routes").map(route => app.use("/", require("./routes/" + route)));
+//routes
+readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
 
-// Database
-mongoose.connect(process.env.DATABASE_URL)
-  .then(() => console.log("database connected successfully"))
-  .catch(error => console.log("error connecting to mongodb", error));
+//database
+mongoose
+  .connect(process.env.DATABASE_URL, {
+    // remove useNewUrlParser, useUnifiedTopology is the default
+  })
+  .then(() => console.log("Database connected successfully"))
+  .catch((err) => console.error("Error connecting to MongoDB", err));
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}..`);
 });
