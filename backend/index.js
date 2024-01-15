@@ -7,6 +7,8 @@ import bodyParser from "body-parser";
 // Securty packages
 import helmet from "helmet";
 import dbConnection from "./dbConfig/index.js"
+import errorMiddleware from "./middleware/errorMiddleware.js";
+import router from "./routes/index.js";
 
 dotenv.config();
 
@@ -24,6 +26,10 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
+app.use(router);
+
+// Error middleware
+app.use(errorMiddleware);
 
 
 app.listen(PORT, () => {
