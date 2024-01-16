@@ -10,6 +10,10 @@ const friendRequestSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Users"
     },
+    friend: {
+      type: Schema.Types.ObjectId,
+      ref: "Users"
+    },
     requestStatus: {
       type: String,
       default: "Pending"

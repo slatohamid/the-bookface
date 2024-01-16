@@ -46,7 +46,7 @@ export const login = async (req, res, next) => {
 
     // find user by email
     const user = await Users.findOne({ email }).select("+password").populate({
-      path: "friend",
+      path: "friends",
       select: "firstName lastName location profileUrl -password",
     });
 
@@ -54,11 +54,11 @@ export const login = async (req, res, next) => {
       next("Invalid email or password");
       return;
     }
-
+    /*
     if (!user?.verified) {
       next("User email is not verified. Check your email account and verify your email");
       return;
-    }
+    } */
 
     // compare password
     const isMatch = await compareString(password, user?.password);
