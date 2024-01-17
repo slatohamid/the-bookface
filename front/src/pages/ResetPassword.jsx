@@ -21,7 +21,7 @@ const ResetPassword = () => {
 
     try {
       const res = await apiRequest({
-        url: "/users/request-passwordreset",
+        url: "/users/request-resetpassword",
         method: "POST",
         data: data,
       });
