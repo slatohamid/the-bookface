@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   CustomButton,
   EditProfile,
@@ -10,15 +10,16 @@ import {
   TextInput,
   TopBar,
 } from "../components";
-import {suggest, requests, posts} from "../assets/data";
-import {Link} from "react-router-dom";
-import {NoProfile} from "../assets";
-import {BsFiletypeGif, BsPersonFillAdd} from "react-icons/bs";
-import {BiImages, BiSolidVideo} from "react-icons/bi";
-import {useForm} from "react-hook-form";
+import { suggest, requests, posts } from "../assets/data";
+import { Link } from "react-router-dom";
+import { NoProfile } from "../assets";
+import { BsFiletypeGif, BsPersonFillAdd } from "react-icons/bs";
+import { BiImages, BiSolidVideo } from "react-icons/bi";
+import { useForm } from "react-hook-form";
+import { fetchPosts, likePost } from "../utils";
 
 const Home = () => {
-  const {user, edit} = useSelector((state) => state.user);
+  const { user, edit } = useSelector((state) => state.user);
   const [friendRequest, setFriendRequest] = useState(requests);
   const [suggestedFriends, setSuggestedFriends] = useState(suggest);
   const [errMsg, setErrMsg] = useState("");
@@ -29,10 +30,15 @@ const Home = () => {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm();
 
   const handlePostSubmit = async (data) => {};
+
+  const handleLikePost = async (uri) => {
+    await likePost({ uri: uri, token: user?.token });
+    await fetchPosts();
+  };
 
   return (
     <>
@@ -50,11 +56,12 @@ const Home = () => {
           <div className="flex-1 h-full px-4 flex flex-col gap-6 overflow-y-auto rounded-lg">
             <form
               onSubmit={handleSubmit(handlePostSubmit)}
-              className="bg-primary px-4 rounded-lg">
+              className="bg-primary px-4 rounded-lg"
+            >
               <div className="w-full flex items-center gap-2 py-4 border-b border-[#66666645]">
                 <img
                   src={user?.profileUrl ?? NoProfile}
-                  alt="User Image"
+                  alt="User Img"
                   className="w-14 h-14 rounded-full object-cover"
                 />
                 <TextInput
@@ -74,7 +81,8 @@ const Home = () => {
                     errMsg?.status === "failed"
                       ? "text-[#f64949fe]"
                       : "text-[#2ba150fe]"
-                  } mt-0.5`}>
+                  } mt-0.5`}
+                >
                   {errMsg?.message}
                 </span>
               )}
@@ -82,7 +90,8 @@ const Home = () => {
               <div className="flex items-center justify-between py-4">
                 <label
                   htmlFor="imgUpload"
-                  className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer">
+                  className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
+                >
                   <input
                     type="file"
                     onChange={(e) => setFile(e.target.files[0])}
@@ -97,7 +106,8 @@ const Home = () => {
 
                 <label
                   className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
-                  htmlFor="videoUpload">
+                  htmlFor="videoUpload"
+                >
                   <input
                     type="file"
                     data-max-size="5120"
@@ -112,7 +122,8 @@ const Home = () => {
 
                 <label
                   className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
-                  htmlFor="vgifUpload">
+                  htmlFor="vgifUpload"
+                >
                   <input
                     type="file"
                     data-max-size="5120"
@@ -148,7 +159,7 @@ const Home = () => {
                   post={post}
                   user={user}
                   deletePost={() => {}}
-                  likePost={() => {}}
+                  likePost={handleLikePost}
                 />
               ))
             ) : (
@@ -168,11 +179,12 @@ const Home = () => {
               </div>
 
               <div className="w-full flex flex-col gap-4 pt-4">
-                {friendRequest?.map(({_id, requestFrom: from}) => (
+                {friendRequest?.map(({ _id, requestFrom: from }) => (
                   <div key={_id} className="flex items-center justify-between">
                     <Link
                       to={"/profile/" + from._id}
-                      className="w-full flex gap-4 items-center cursor-pointer">
+                      className="w-full flex gap-4 items-center cursor-pointer"
+                    >
                       <img
                         src={from?.profileUrl ?? NoProfile}
                         alt={from?.firstName}
@@ -212,11 +224,13 @@ const Home = () => {
                 {suggestedFriends?.map((friend) => (
                   <div
                     className="flex items-center justify-between"
-                    key={friend._id}>
+                    key={friend._id}
+                  >
                     <Link
                       to={"/profile/" + friend?._id}
                       key={friend?._id}
-                      className="w-full flex gap-4 items-center cursor-pointer">
+                      className="w-full flex gap-4 items-center cursor-pointer"
+                    >
                       <img
                         src={friend?.profileUrl ?? NoProfile}
                         alt={friend?.firstName}
@@ -235,7 +249,8 @@ const Home = () => {
                     <div className="flex gap-1">
                       <button
                         className="bg-[#FFA50030] text-sm text-white p-1 rounded"
-                        onClick={() => {}}>
+                        onClick={() => {}}
+                      >
                         <BsPersonFillAdd size={20} className="text-[#FFA500]" />
                       </button>
                     </div>

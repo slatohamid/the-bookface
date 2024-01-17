@@ -1,16 +1,16 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import moment from "moment";
-import {NoProfile} from "../assets";
-import {BiComment, BiLike, BiSolidLike} from "react-icons/bi";
-import {MdOutlineDeleteOutline} from "react-icons/md";
-import {useForm} from "react-hook-form";
+import { NoProfile } from "../assets";
+import { BiComment, BiLike, BiSolidLike } from "react-icons/bi";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { useForm } from "react-hook-form";
 import TextInput from "./TextInput";
 import Loading from "./Loading";
 import CustomButton from "./CustomButton";
-import {postComments} from "../assets/data";
+import { postComments } from "../assets/data";
 
-const ReplyCard = ({reply, user, handleLike}) => {
+const ReplyCard = ({ reply, user, handleLike }) => {
   return (
     <div className="w-full py-3">
       <div className="flex gap-3 items-center mb-1">
@@ -39,7 +39,8 @@ const ReplyCard = ({reply, user, handleLike}) => {
         <div className="mt-2 flex gap-6">
           <p
             className="flex gap-2 items-center text-base text-ascent-2 cursor-pointer"
-            onClick={handleLike}>
+            onClick={handleLike}
+          >
             {reply?.likes?.includes(user?._id) ? (
               <BiSolidLike size={20} color="orange" />
             ) : (
@@ -53,14 +54,14 @@ const ReplyCard = ({reply, user, handleLike}) => {
   );
 };
 
-const CommentForm = ({user, id, replyAt, getComments}) => {
+const CommentForm = ({ user, id, replyAt, getComments }) => {
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const {
     register,
     handleSubmit,
     reset,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     mode: "onChange",
   });
@@ -70,11 +71,12 @@ const CommentForm = ({user, id, replyAt, getComments}) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full border-b border-[#66666645]">
+      className="w-full border-b border-[#66666645]"
+    >
       <div className="w-full flex items-center gap-2 py-4">
         <img
           src={user?.profileUrl ?? NoProfile}
-          alt="User Image"
+          alt="User Img"
           className="w-10 h-10 rounded-full object-cover"
         />
 
@@ -95,7 +97,8 @@ const CommentForm = ({user, id, replyAt, getComments}) => {
             errMsg?.status === "failed"
               ? "text-[#f64949fe]"
               : "text-[#2ba150fe]"
-          } mt-0.5`}>
+          } mt-0.5`}
+        >
           {errMsg?.message}
         </span>
       )}
@@ -115,7 +118,7 @@ const CommentForm = ({user, id, replyAt, getComments}) => {
   );
 };
 
-const PostCard = ({post, user, deletePost, likePost}) => {
+const PostCard = ({ post, user, deletePost, likePost }) => {
   const [showAll, setShowAll] = useState(0);
   const [showReply, setShowReply] = useState(0);
   const [comments, setComments] = useState([]);
@@ -129,7 +132,11 @@ const PostCard = ({post, user, deletePost, likePost}) => {
     setComments(postComments);
     setLoading(false);
   };
-  const handleLike = async () => {};
+
+  const handleLike = async (uri) => {
+    await likePost(uri);
+    await getComments(post?._id);
+  };
 
   return (
     <div className="mb-2 bg-primary p-4 rounded-xl">
@@ -168,13 +175,15 @@ const PostCard = ({post, user, deletePost, likePost}) => {
             (showAll === post?._id ? (
               <span
                 className="text-orange ml-2 font-mediu cursor-pointer"
-                onClick={() => setShowAll(0)}>
+                onClick={() => setShowAll(0)}
+              >
                 Show Less
               </span>
             ) : (
               <span
                 className="text-orange ml-2 font-medium cursor-pointer"
-                onClick={() => setShowAll(post?._id)}>
+                onClick={() => setShowAll(post?._id)}
+              >
                 Show More
               </span>
             ))}
@@ -183,7 +192,7 @@ const PostCard = ({post, user, deletePost, likePost}) => {
         {post?.image && (
           <img
             src={post?.image}
-            alt="post image"
+            alt="post img"
             className="w-full mt-2 rounded-lg"
           />
         )}
@@ -191,8 +200,12 @@ const PostCard = ({post, user, deletePost, likePost}) => {
 
       <div
         className="mt-4 flex justify-between items-center px-3 py-2 text-ascent-2
-      text-base border-t border-[#66666645]">
-        <p className="flex gap-2 items-center text-base cursor-pointer">
+      text-base border-t border-[#66666645]"
+      >
+        <p
+          className="flex gap-2 items-center text-base cursor-pointer"
+          onClick={() => handleLike("/posts/like/" + post?._id)}
+        >
           {post?.likes?.includes(user?._id) ? (
             <BiSolidLike size={20} color="orange" />
           ) : (
@@ -206,7 +219,8 @@ const PostCard = ({post, user, deletePost, likePost}) => {
           onClick={() => {
             setShowComments(showComments === post._id ? null : post._id);
             getComments(post?._id);
-          }}>
+          }}
+        >
           <BiComment size={20} />
           {post?.comments?.length} Comments
         </p>
@@ -214,7 +228,8 @@ const PostCard = ({post, user, deletePost, likePost}) => {
         {user?._id === post?.userId?._id && (
           <div
             className="flex gap-1 items-center text-base text-ascent-1 cursor-pointer"
-            onClick={() => deletePost(post?._id)}>
+            onClick={() => deletePost(post?._id)}
+          >
             <MdOutlineDeleteOutline size={20} />
             <span>Delete</span>
           </div>
@@ -269,7 +284,8 @@ const PostCard = ({post, user, deletePost, likePost}) => {
                     </p>
                     <span
                       className="text-orange cursor-pointer"
-                      onClick={() => setReplyComments(comment?._id)}>
+                      onClick={() => setReplyComments(comment?._id)}
+                    >
                       Reply
                     </span>
                   </div>
@@ -296,7 +312,8 @@ const PostCard = ({post, user, deletePost, likePost}) => {
                             ? 0
                             : comment?.replies?._id
                         )
-                      }>
+                      }
+                    >
                       Show Replies ({comment?.replies?.length})
                     </p>
                   )}
