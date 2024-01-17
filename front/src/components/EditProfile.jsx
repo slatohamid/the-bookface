@@ -1,14 +1,15 @@
-import React, {useState} from "react";
-import {useForm} from "react-hook-form";
-import {MdClose} from "react-icons/md";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { MdClose } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import TextInput from "./TextInput";
 import Loading from "./Loading";
 import CustomButton from "./CustomButton";
-import {UpdateProfile} from "../redux/userSlice";
+import { UpdateProfile, UserLogin } from "../redux/userSlice";
+import { apiRequest, handleFileUpload } from "../utils";
 
 const EditProfile = () => {
-  const {user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [errMsg, setErrMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,13 +18,52 @@ const EditProfile = () => {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     mode: "onChange",
-    defaultValues: {...user},
+    defaultValues: { ...user },
   });
 
-  const onSubmit = async (data) => {};
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    setErrMsg("");
+
+    try {
+      const uri = picture && (await handleFileUpload(picture));
+
+      const { firstName, lastName, location, profession } = data;
+
+      const res = await apiRequest({
+        url: "/users/update-user",
+        data: {
+          firstName,
+          lastName,
+          location,
+          profession,
+          profileUrl: uri ? uri : user?.profileUrl,
+        },
+        method: "POST",
+        token: user?.token,
+      });
+
+      if (res.status === "failed") {
+        setErrMsg(res);
+      } else {
+        setErrMsg(res);
+        const newUser = { tokent: res?.token, ...res?.user };
+        dispatch(UserLogin(newUser));
+
+        setTimeout(() => {
+          dispatch(UpdateProfile(false));
+        }, 3000);
+      }
+
+      setIsSubmitting(false);
+    } catch (error) {
+      console.log(error);
+      setIsSubmitting(false);
+    }
+  };
 
   const handleClose = () => {
     dispatch(UpdateProfile(false));
@@ -45,11 +85,13 @@ const EditProfile = () => {
             className="inline-block align-bottom bg-primary rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="modal-headline">
+            aria-labelledby="modal-headline"
+          >
             <div className="flex justify-between px-6 pt-5 pb-2">
               <label
                 htmlFor="name"
-                className="block font-medium text-xl text-ascent-1 text-left">
+                className="block font-medium text-xl text-ascent-1 text-left"
+              >
                 Edit Profile
               </label>
 
@@ -59,7 +101,8 @@ const EditProfile = () => {
             </div>
             <form
               className="px-4 sm:px-6 flex flex-col gap-3 2xl:gap-6"
-              onSubmit={handleSubmit(onSubmit)}>
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <TextInput
                 name="firstName"
                 label="First Name"
@@ -108,7 +151,8 @@ const EditProfile = () => {
 
               <label
                 className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer my-4"
-                htmlFor="imgUpload">
+                htmlFor="imgUpload"
+              >
                 <input
                   type="file"
                   className=""
@@ -125,7 +169,8 @@ const EditProfile = () => {
                     errMsg?.status === "failed"
                       ? "text-[#f64949fe]"
                       : "text-[#2ba150fe]"
-                  } mt-0.5`}>
+                  } mt-0.5`}
+                >
                   {errMsg?.message}
                 </span>
               )}
