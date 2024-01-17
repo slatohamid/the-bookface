@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {
   CustomButton,
   EditProfile,
@@ -10,15 +10,17 @@ import {
   TextInput,
   TopBar,
 } from "../components";
-import {suggest, requests, posts} from "../assets/data";
+import {suggest, requests} from "../assets/data";
 import {Link} from "react-router-dom";
 import {NoProfile} from "../assets";
 import {BsFiletypeGif, BsPersonFillAdd} from "react-icons/bs";
 import {BiImages, BiSolidVideo} from "react-icons/bi";
 import {useForm} from "react-hook-form";
+import {apiRequest, fetchPosts, handleFileUpload} from "../utils";
 
 const Home = () => {
   const {user, edit} = useSelector((state) => state.user);
+  const {posts} = useSelector((state) => state.posts);
   const [friendRequest, setFriendRequest] = useState(requests);
   const [suggestedFriends, setSuggestedFriends] = useState(suggest);
   const [errMsg, setErrMsg] = useState("");
@@ -26,13 +28,69 @@ const Home = () => {
   const [posting, setPosting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: {errors},
   } = useForm();
 
-  const handlePostSubmit = async (data) => {};
+  const handlePostSubmit = async (data) => {
+    setPosting(true);
+    setErrMsg("");
+
+    try {
+      const uri = file && (await handleFileUpload(file));
+
+      const newDate = uri ? {...data, image: uri} : data;
+
+      const res = await apiRequest({
+        url: "/posts/create-post",
+        data: newDate,
+        method: "POST",
+        token: user?.token,
+      });
+
+      if (res?.status === "failed") {
+        setErrMsg(res);
+      } else {
+        reset({
+          description: "",
+        });
+        setFile(null);
+        setErrMsg("");
+        await fetchPost();
+      }
+      setPosting(false);
+    } catch (error) {
+      console.log(error);
+      setPosting(false);
+    }
+  };
+
+  const fetchPost = async () => {
+    await fetchPosts(user?.token, dispatch);
+
+    setLoading(false);
+  };
+
+  const hendleLikePost = async () => {};
+  const hendleDelete = async () => {};
+  const fetchFriendRequests = async () => {};
+  const fetchSuggestedFriends = async () => {};
+  const hendleFriendRequest = async () => {};
+  const acceptFriendRequest = async () => {};
+  const getUser = async () => {};
+
+  useEffect(() => {
+    setLoading(true);
+    getUser();
+    fetchPost();
+    fetchFriendRequests();
+    fetchSuggestedFriends();
+  }, []);
 
   return (
     <>

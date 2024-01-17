@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { TbSocial } from "react-icons/tb";
-import { BsShare } from "react-icons/bs";
-import { AiOutlineInteraction } from "react-icons/ai";
-import { ImConnection } from "react-icons/im";
-import { CustomButton, Loading, TextInput } from "../components";
-import { BgImage } from "../assets";
-import { UserLogin } from "../redux/userSlice";
-import { apiRequest } from "../utils";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {useForm} from "react-hook-form";
+import {TbSocial} from "react-icons/tb";
+import {BsShare} from "react-icons/bs";
+import {AiOutlineInteraction} from "react-icons/ai";
+import {ImConnection} from "react-icons/im";
+import {CustomButton, Loading, TextInput} from "../components";
+import {BgImage} from "../assets";
+import {UserLogin} from "../redux/userSlice";
+import {apiRequest} from "../utils";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
   } = useForm({
     mode: "onChange",
   });
@@ -38,7 +38,7 @@ const Login = () => {
         setErrMsg(res?.message || "Login failed");
       } else {
         setErrMsg("");
-        const newData = { token: res?.token, ...res?.user };
+        const newData = {token: res?.token, ...res?.user};
         dispatch(UserLogin(newData));
         window.location.replace("/");
       }
@@ -73,8 +73,7 @@ const Login = () => {
 
           <form
             className="py-8 flex flex-col gap-5="
-            onSubmit={handleSubmit(onSubmit)}
-          >
+            onSubmit={handleSubmit(onSubmit)}>
             <TextInput
               name="email"
               placeholder="email@example.com"
@@ -103,8 +102,7 @@ const Login = () => {
 
             <Link
               to="/reset-password"
-              className="text-sm text-right text-orange font-semibold"
-            >
+              className="text-sm text-right text-orange font-semibold">
               Forgot Password ?
             </Link>
 
@@ -114,8 +112,7 @@ const Login = () => {
                   errMsg?.status === "failed"
                     ? "text-[#f64949fe]"
                     : "text-[#2ba150fe]"
-                } mt-0.5`}
-              >
+                } mt-0.5`}>
                 {errMsg?.message}
               </span>
             )}
@@ -135,8 +132,7 @@ const Login = () => {
             Don't have an account?
             <Link
               to="/register"
-              className="text-[#FFA500] font-semibold ml-2 cursor-pointer"
-            >
+              className="text-[#FFA500] font-semibold ml-2 cursor-pointer">
               Create Account
             </Link>
           </p>
