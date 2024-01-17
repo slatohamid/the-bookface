@@ -1,54 +1,55 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {useForm} from "react-hook-form";
-import {TbSocial} from "react-icons/tb";
-import {BsShare} from "react-icons/bs";
-import {AiOutlineInteraction} from "react-icons/ai";
-import {ImConnection} from "react-icons/im";
-import {CustomButton, Loading, TextInput} from "../components";
-import {BgImage} from "../assets";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { TbSocial } from "react-icons/tb";
+import { BsShare } from "react-icons/bs";
+import { AiOutlineInteraction } from "react-icons/ai";
+import { ImConnection } from "react-icons/im";
+import { CustomButton, Loading, TextInput } from "../components";
+import { BgImage } from "../assets";
 import { UserLogin } from "../redux/userSlice";
+import { apiRequest } from "../utils";
 
-const [errMsg, setErrMsg] = useState("");
-const [isSubmitting, setIsSubmitting] = useState(false);
-const dispatch = useDispatch();
 const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     mode: "onChange",
   });
 
+  const [errMsg, setErrMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-  };
 
-  try {
-    const res = await apiRequest({
-      url: "/auth/login",
-      method: "POST",
-      data: data,
-    });
-  
-    if (res?.status === "failed") {
-      setErrMsg(res?.message || "Login failed");
-    } else {
-      setErrMsg("");
-      const newData = { token: res?.token, ...res?.user };
-      dispatch(UserLogin(newData));
-      window.location.replace("/");
+    try {
+      const res = await apiRequest({
+        url: "/auth/login",
+        method: "POST",
+        data: data,
+      });
+
+      if (res?.status === "failed") {
+        setErrMsg(res?.message || "Login failed");
+      } else {
+        setErrMsg("");
+        const newData = { token: res?.token, ...res?.user };
+        dispatch(UserLogin(newData));
+        window.location.replace("/");
+      }
+
+      setIsSubmitting(false);
+    } catch (error) {
+      // Handle network errors or unexpected responses
+      setErrMsg(error?.response?.data?.message || "An error occurred");
+      setIsSubmitting(false);
     }
-  
-    setIsSubmitting(false);
-  } catch (error) {
-    // Handle network errors or unexpected responses
-    setErrMsg(error?.response?.data?.message || "An error occurred");
-    setIsSubmitting(false);
-  }
-  
+  };
 
   return (
     <div className="bg-bgColor w-full h-[100vh] flex items-center justify-center p-6">
@@ -72,7 +73,8 @@ const Login = () => {
 
           <form
             className="py-8 flex flex-col gap-5="
-            onSubmit={handleSubmit(onSubmit)}>
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <TextInput
               name="email"
               placeholder="email@example.com"
@@ -101,17 +103,19 @@ const Login = () => {
 
             <Link
               to="/reset-password"
-              className="text-sm text-right text-orange font-semibold">
+              className="text-sm text-right text-orange font-semibold"
+            >
               Forgot Password ?
             </Link>
 
             {errMsg?.message && (
               <span
                 className={`text-sm ${
-                  errMsg?.status == "failed"
+                  errMsg?.status === "failed"
                     ? "text-[#f64949fe]"
                     : "text-[#2ba150fe]"
-                } mt-0.5`}>
+                } mt-0.5`}
+              >
                 {errMsg?.message}
               </span>
             )}
@@ -131,7 +135,8 @@ const Login = () => {
             Don't have an account?
             <Link
               to="/register"
-              className="text-[#FFA500] font-semibold ml-2 cursor-pointer">
+              className="text-[#FFA500] font-semibold ml-2 cursor-pointer"
+            >
               Create Account
             </Link>
           </p>
@@ -141,7 +146,7 @@ const Login = () => {
           <div className="relative w-full flex items-center justify-center">
             <img
               src={BgImage}
-              alt="Bg Image"
+              alt="Background"
               className="w-48 2xl:w-64 h-48 2xl:h-64 rounded-full object-cover"
             />
 

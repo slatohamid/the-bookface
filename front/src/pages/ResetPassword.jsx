@@ -1,6 +1,7 @@
-import React, {useState} from "react";
-import {useForm} from "react-hook-form";
-import {CustomButton, Loading, TextInput} from "../components";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { CustomButton, Loading, TextInput } from "../components";
+import { apiRequest } from "../utils";
 
 const ResetPassword = () => {
   const [errMsg, setErrMsg] = useState("");
@@ -10,7 +11,7 @@ const ResetPassword = () => {
     register,
     handleSubmit,
 
-    formState: {errors},
+    formState: { errors },
   } = useForm({
     mode: "onChange",
   });
@@ -48,7 +49,8 @@ const ResetPassword = () => {
 
         <form
           onSubmit={handleSubmit(handleResetSubmit)}
-          className="py-4 flex flex-col gap-5">
+          className="py-4 flex flex-col gap-5"
+        >
           <TextInput
             name="email"
             placeholder="email@example.com"
@@ -67,7 +69,8 @@ const ResetPassword = () => {
                 errMsg?.status === "failed"
                   ? "text-[#f64949fe]"
                   : "text-[#2ba150fe]"
-              } mt-0.5`}>
+              } mt-0.5`}
+            >
               {errMsg?.message}
             </span>
           )}
