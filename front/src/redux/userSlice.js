@@ -1,5 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {user} from "../assets/data";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: JSON.parse(window?.localStorage.getItem("user")) ?? {},
@@ -23,6 +22,7 @@ const userSlice = createSlice({
     },
   },
 });
+
 export default userSlice.reducer;
 
 export function UserLogin(user) {

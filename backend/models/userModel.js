@@ -21,9 +21,18 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password length should be greater than 6 character!"],
       select: true,
     },
-    location: { type: String },
-    profileUrl: { type: String },
-    profession: { type: String },
+    location: {
+      type: String,
+      required: false,
+    },
+    profileUrl: {
+      type: String,
+      required: false,
+    },
+    profession: {
+      type: String,
+      required: false,
+    },
     friends: [
       {
         type: Schema.Types.ObjectId,
