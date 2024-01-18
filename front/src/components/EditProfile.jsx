@@ -50,7 +50,7 @@ const EditProfile = () => {
         setErrMsg(res);
       } else {
         setErrMsg(res);
-        const newUser = { tokent: res?.token, ...res?.user };
+        const newUser = { token: res?.token, ...res?.user };
         dispatch(UserLogin(newUser));
 
         setTimeout(() => {

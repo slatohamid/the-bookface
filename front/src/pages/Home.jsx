@@ -52,11 +52,11 @@ const Home = () => {
     try {
       const uri = file && (await handleFileUpload(file));
 
-      const newDate = uri ? { ...data, image: uri } : data;
+      const newData = uri ? { ...data, image: uri } : data;
 
       const res = await apiRequest({
         url: "/posts/create-post",
-        data: newDate,
+        data: newData,
         method: "POST",
         token: user?.token,
       });
@@ -80,7 +80,6 @@ const Home = () => {
 
   const fetchPost = async () => {
     await fetchPosts(user?.token, dispatch);
-
     setLoading(false);
   };
 

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   FriendsCard,
   Loading,
@@ -8,18 +8,18 @@ import {
   ProfileCard,
   TopBar,
 } from "../components";
-import {get, set} from "react-hook-form";
-import {deletePost, fetchPosts, getUserInfo, likePost} from "../utils";
+//import { get, set } from "react-hook-form";
+import { deletePost, fetchPosts, getUserInfo, likePost } from "../utils";
 
 const Profile = () => {
-  const {id} = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const {user} = useSelector((state) => state.user);
-  const {posts} = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.user);
+  const { posts } = useSelector((state) => state.posts);
   const [userInfo, setUserInfo] = useState(user);
   const [loading, setLoading] = useState(false);
 
-  const uri = `/posts/get-user-post/" + id`;
+  const uri = "/posts/get-user-post/" + id;
 
   const getUser = async () => {
     const res = await getUserInfo(user?.token, id);
@@ -36,7 +36,7 @@ const Profile = () => {
     await getPosts();
   };
   const handleLikePost = async (uri) => {
-    await likePost({uri: uri, token: user?.token});
+    await likePost({ uri: uri, token: user?.token });
     await getPosts();
   };
 
