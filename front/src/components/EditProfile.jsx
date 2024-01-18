@@ -42,7 +42,7 @@ const EditProfile = () => {
           profession,
           profileUrl: uri ? uri : user?.profileUrl,
         },
-        method: "POST",
+        method: "PUT",
         token: user?.token,
       });
 
