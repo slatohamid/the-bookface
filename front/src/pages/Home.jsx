@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {
   CustomButton,
   EditProfile,
@@ -10,11 +10,11 @@ import {
   TextInput,
   TopBar,
 } from "../components";
-import { Link } from "react-router-dom";
-import { NoProfile } from "../assets";
-import { BsFiletypeGif, BsPersonFillAdd } from "react-icons/bs";
-import { BiImages, BiSolidVideo } from "react-icons/bi";
-import { useForm } from "react-hook-form";
+import {Link} from "react-router-dom";
+import {NoProfile} from "../assets";
+import {BsFiletypeGif, BsPersonFillAdd} from "react-icons/bs";
+import {BiImages, BiSolidVideo} from "react-icons/bi";
+import {useForm} from "react-hook-form";
 import {
   handleFileUpload,
   apiRequest,
@@ -24,11 +24,11 @@ import {
   sendFriendRequest,
   getUserInfo,
 } from "../utils";
-import { UserLogin } from "../redux/userSlice";
+import {UserLogin} from "../redux/userSlice";
 
 const Home = () => {
-  const { user, edit } = useSelector((state) => state.user);
-  const { posts } = useSelector((state) => state.posts);
+  const {user, edit} = useSelector((state) => state.user);
+  const {posts} = useSelector((state) => state.posts);
   const [friendRequest, setFriendRequest] = useState([]);
   const [suggestedFriends, setSuggestedFriends] = useState([]);
   const [errMsg, setErrMsg] = useState("");
@@ -41,7 +41,7 @@ const Home = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
     reset,
   } = useForm();
 
@@ -52,7 +52,7 @@ const Home = () => {
     try {
       const uri = file && (await handleFileUpload(file));
 
-      const newData = uri ? { ...data, image: uri } : data;
+      const newData = uri ? {...data, image: uri} : data;
 
       const res = await apiRequest({
         url: "/posts/create-post",
@@ -84,7 +84,7 @@ const Home = () => {
   };
 
   const handleLikePost = async (uri) => {
-    await likePost({ uri: uri, token: user?.token });
+    await likePost({uri: uri, token: user?.token});
     await fetchPosts();
   };
 
@@ -135,7 +135,7 @@ const Home = () => {
         url: "/users/accept-request",
         token: user?.token,
         method: "POST",
-        data: { rid: id, status },
+        data: {rid: id, status},
       });
       setFriendRequest(res?.data);
     } catch (error) {
@@ -145,7 +145,7 @@ const Home = () => {
 
   const getUser = async () => {
     const res = await getUserInfo(user?.token);
-    const newData = { token: user?.token, ...res };
+    const newData = {token: user?.token, ...res};
     dispatch(UserLogin(newData));
   };
 
@@ -159,7 +159,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-full px-0 lg:px-10 pb-20 2xl:px-40 bg-bgColor lg:rounded-lg h-screen overflow-hidden">
+      <div className="w-full px-0 lg:px-10 pb-20 2xl:px-40 bg-bgColor lg:rounded-lg h-screen overflow-hidden ">
         <TopBar />
 
         <div className="w-full flex gap-2 lg:gap-4 pt-5 pb-10 h-full">
@@ -173,16 +173,15 @@ const Home = () => {
           <div className="flex-1 h-full px-4 flex flex-col gap-6 overflow-y-auto rounded-lg">
             <form
               onSubmit={handleSubmit(handlePostSubmit)}
-              className="bg-primary px-4 rounded-lg"
-            >
+              className="bg-primary px-4 rounded-lg">
               <div className="w-full flex items-center gap-2 py-4 border-b border-[#66666645]">
                 <img
                   src={user?.profileUrl ?? NoProfile}
                   alt="User Img"
-                  className="w-14 h-14 rounded-full object-cover"
+                  className="w-12 h-10 md:w-16 md:h-14 rounded-full   object-cover"
                 />
                 <TextInput
-                  styles="w-full rounded-full py-5"
+                  styles="w-full h-10 rounded-full py-5 md:h-12 mb-2"
                   placeholder="What's on your mind...."
                   name="description"
                   register={register("description", {
@@ -198,8 +197,7 @@ const Home = () => {
                     errMsg?.status === "failed"
                       ? "text-[#f64949fe]"
                       : "text-[#2ba150fe]"
-                  } mt-0.5`}
-                >
+                  } mt-0.5`}>
                   {errMsg?.message}
                 </span>
               )}
@@ -207,8 +205,7 @@ const Home = () => {
               <div className="flex items-center justify-between py-4">
                 <label
                   htmlFor="imgUpload"
-                  className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
-                >
+                  className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer">
                   <input
                     type="file"
                     onChange={(e) => setFile(e.target.files[0])}
@@ -223,8 +220,7 @@ const Home = () => {
 
                 <label
                   className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
-                  htmlFor="videoUpload"
-                >
+                  htmlFor="videoUpload">
                   <input
                     type="file"
                     data-max-size="5120"
@@ -239,8 +235,7 @@ const Home = () => {
 
                 <label
                   className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
-                  htmlFor="vgifUpload"
-                >
+                  htmlFor="vgifUpload">
                   <input
                     type="file"
                     data-max-size="5120"
@@ -296,12 +291,11 @@ const Home = () => {
               </div>
 
               <div className="w-full flex flex-col gap-4 pt-4">
-                {friendRequest?.map(({ _id, requestFrom: from }) => (
+                {friendRequest?.map(({_id, requestFrom: from}) => (
                   <div key={_id} className="flex items-center justify-between">
                     <Link
                       to={"/profile/" + from._id}
-                      className="w-full flex gap-4 items-center cursor-pointer"
-                    >
+                      className="w-full flex gap-4 items-center cursor-pointer">
                       <img
                         src={from?.profileUrl ?? NoProfile}
                         alt={from?.firstName}
@@ -343,13 +337,11 @@ const Home = () => {
                 {suggestedFriends?.map((friend) => (
                   <div
                     className="flex items-center justify-between"
-                    key={friend._id}
-                  >
+                    key={friend._id}>
                     <Link
                       to={"/profile/" + friend?._id}
                       key={friend?._id}
-                      className="w-full flex gap-4 items-center cursor-pointer"
-                    >
+                      className="w-full flex gap-4 items-center cursor-pointer">
                       <img
                         src={friend?.profileUrl ?? NoProfile}
                         alt={friend?.firstName}
@@ -368,8 +360,7 @@ const Home = () => {
                     <div className="flex gap-1">
                       <button
                         className="bg-[#FFA50030] text-sm text-white p-1 rounded"
-                        onClick={() => handleFriendRequest(friend?._id)}
-                      >
+                        onClick={() => handleFriendRequest(friend?._id)}>
                         <BsPersonFillAdd size={20} className="text-[#FFA500]" />
                       </button>
                     </div>
