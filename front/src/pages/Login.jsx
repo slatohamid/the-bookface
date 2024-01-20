@@ -11,6 +11,7 @@ import { BgImage } from "../assets";
 import { UserLogin } from "../redux/userSlice";
 import { apiRequest } from "../utils";
 import CookieConsent from "react-cookie-consent";
+
 const Login = () => {
   const {
     register,
