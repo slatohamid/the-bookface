@@ -2,7 +2,7 @@
 
 A facebook-style web app.
 
-See it live [here](See it live [here](https://friendlink-client.vercel.app/).).
+See it live [here](https://friendlink-client.vercel.app/).
 
 This project was bootstrapped with [Create React App](https://create-react-app.dev/).
 
