@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const hashString = async (useValue) => {
@@ -15,5 +15,5 @@ export const compareString = async (userPassword, password) => {
 
 // json webtoken
 export function createJWT(id) {
-  return jwt.sign({ userId: id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
-};
+  return jwt.sign({userId: id}, process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
+}

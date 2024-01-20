@@ -27,7 +27,7 @@ const ProfileCard = ({user}) => {
             <img
               src={user?.profileUrl ?? NoProfile}
               alt={user?.email}
-              className="w-14 h-14 object-cover rounded-full"
+              className="w-14 h-14 object-cover rounded-full border-2 border-[#FFA500] "
             />
 
             <div className="flex flex-col justify-center">
