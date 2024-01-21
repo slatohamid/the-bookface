@@ -3,6 +3,7 @@
 A facebook-style web app.
 
 **See it live**
+
 [![Click Here](https://img.shields.io/badge/FriendLink.com-%23FFA500?style=flat-square)](https://friendlink-client.vercel.app/)
 
 This project was bootstrapped with [Create React App](https://create-react-app.dev/).
