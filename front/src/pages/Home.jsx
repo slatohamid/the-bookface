@@ -178,10 +178,10 @@ const Home = () => {
                 <img
                   src={user?.profileUrl ?? NoProfile}
                   alt="User Img"
-                  className="w-12 h-10 md:w-16 md:h-14 rounded-full   object-cover"
+                  className="w-12 h-10 md:w-16 md:h-14 rounded-full border border-[#FFA500]  object-cover"
                 />
                 <TextInput
-                  styles="w-full h-10 rounded-full py-5 md:h-12 mb-2"
+                  styles="w-full h-10  rounded-full py-5 md:h-10 mb-2"
                   placeholder="What's on your mind...."
                   name="description"
                   register={register("description", {
@@ -281,7 +281,7 @@ const Home = () => {
             )}
           </div>
 
-          {/* RIGJT */}
+          {/* RIGHT */}
           <div className="hidden w-1/4 h-full lg:flex flex-col gap-8 overflow-y-auto">
             {/* FRIEND REQUEST */}
             <div className="w-full bg-primary shadow-sm rounded-lg px-6 py-5">

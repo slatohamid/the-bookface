@@ -1,14 +1,16 @@
 import axios from "axios";
-import { SetPosts } from "../redux/postSlice";
+import {SetPosts} from "../redux/postSlice";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://friendlink-m5z0.onrender.com";
+
+// "http://localhost:8000";
 
 export const API = axios.create({
   baseURL: API_URL,
   responseType: "json",
 });
 
-export const apiRequest = async ({ url, token, data, method }) => {
+export const apiRequest = async ({url, token, data, method}) => {
   try {
     const result = await API(url, {
       method: method || "GET",
@@ -23,7 +25,7 @@ export const apiRequest = async ({ url, token, data, method }) => {
   } catch (error) {
     const err = error.response.data;
     console.log(error);
-    return { status: err.success, message: err.message };
+    return {status: err.success, message: err.message};
   }
 };
 
@@ -59,7 +61,7 @@ export const fetchPosts = async (token, dispatch, uri, data) => {
   }
 };
 
-export const likePost = async ({ uri, token }) => {
+export const likePost = async ({uri, token}) => {
   try {
     const res = await apiRequest({
       url: uri,
@@ -115,7 +117,7 @@ export const sendFriendRequest = async (token, id) => {
       url: "/users/friend-request",
       token: token,
       method: "POST",
-      data: { requestTo: id },
+      data: {requestTo: id},
     });
 
     return;
@@ -130,7 +132,7 @@ export const viewUserProfile = async (token, id) => {
       url: "/users/profile-view",
       token: token,
       method: "POST",
-      data: { id },
+      data: {id},
     });
 
     return;
